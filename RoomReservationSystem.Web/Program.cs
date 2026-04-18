@@ -1,4 +1,4 @@
-namespace RoomReservationSystem.WebApp
+namespace RoomReservationSystem.Web
 {
     public class Program
     {

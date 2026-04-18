@@ -1,4 +1,4 @@
-namespace RoomReservationSystem.WebApp.Models
+namespace RoomReservationSystem.Web.Models
 {
     public class ErrorViewModel
     {

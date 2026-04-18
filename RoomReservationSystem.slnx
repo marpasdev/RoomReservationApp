@@ -1,3 +1,7 @@
 <Solution>
-  <Project Path="RoomReservationSystem/RoomReservationSystem.csproj" />
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="RoomReservationSystem.Web/RoomReservationSystem.Web.csproj" />
 </Solution>

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using RoomReservationSystem.WebApp.Models;
+using RoomReservationSystem.Web.Models;
 using System.Diagnostics;
 
-namespace RoomReservationSystem.WebApp.Controllers
+namespace RoomReservationSystem.Web.Controllers
 {
     public class HomeController : Controller
     {
