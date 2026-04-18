@@ -1,0 +1,1 @@
+# This repository contains a school project developed for the C# II class
