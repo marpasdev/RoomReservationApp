@@ -3,5 +3,6 @@
     <File Path=".gitignore" />
     <File Path="README.md" />
   </Folder>
+  <Project Path="RoomReservationSystem.Shared/RoomReservationSystem.Shared.csproj" />
   <Project Path="RoomReservationSystem.Web/RoomReservationSystem.Web.csproj" />
 </Solution>
