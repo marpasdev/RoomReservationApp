@@ -14,5 +14,6 @@ namespace RoomReservationSystem.Shared.DTOs.Reservations
         public int PersonCount { get; set; }
         public ReservationStatus Status { get; set; }
         public int BookerId { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
