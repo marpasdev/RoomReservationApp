@@ -1,3 +1,6 @@
+using Dapper;
+using Microsoft.Data.Sqlite;
+
 namespace RoomReservationSystem.Web
 {
     public class Program
@@ -11,6 +14,11 @@ namespace RoomReservationSystem.Web
 
             var app = builder.Build();
 
+            string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            using var connection = new SqliteConnection(connectionString);
+            var initScript = File.ReadAllText("../Database/init.sql");
+            connection.Execute(initScript);
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -22,6 +30,7 @@ namespace RoomReservationSystem.Web
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();
