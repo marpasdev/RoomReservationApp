@@ -4,14 +4,14 @@ namespace RoomReservationSystem.Web.Repositories
 {
     public interface IEquipmentRepository
     {
-        public Task<int> CreateAsync(Equipment equipment);
+        Task<int> CreateAsync(Equipment equipment);
 
-        public Task DeleteAsync(int id);
+        Task DeleteAsync(int id);
 
-        public Task UpdateAsync(Equipment equipment);
+        Task UpdateAsync(Equipment equipment);
 
-        public Task<IEnumerable<Equipment>> GetAllAsync();
+        Task<IEnumerable<Equipment>> GetAllAsync();
 
-        public Task<Equipment?> GetByIdAsync(int id);
+        Task<Equipment?> GetByIdAsync(int id);
     }
 }

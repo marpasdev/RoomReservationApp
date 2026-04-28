@@ -41,7 +41,7 @@ namespace RoomReservationSystem.Web.Repositories
                 """);
         }
 
-        public async Task<IEnumerable<Room>> GetAvailableAsync(DateTime from, DateTime to, int minCapacity)
+        public async Task<IEnumerable<Room>> GetAvailableAsync(DateTime start, DateTime end, int minCapacity)
         {
             using var connection = new SqliteConnection(connectionString);
             return await connection.QueryAsync<Room>("""
@@ -50,9 +50,9 @@ namespace RoomReservationSystem.Web.Repositories
                 WHERE Capacity >= @MinCapacity and Id not in (
                     SELECT RoomId
                     FROM Reservation
-                    WHERE Status = 0 and (Start < @To and End > @From)
+                    WHERE Status = 0 and (Start < @End and End > @Start)
                 );
-                """, new { From = from, To = to, MinCapacity = minCapacity });
+                """, new { Start = start, End = end, MinCapacity = minCapacity });
         }
 
         public async Task<Room?> GetByIdAsync(int id)

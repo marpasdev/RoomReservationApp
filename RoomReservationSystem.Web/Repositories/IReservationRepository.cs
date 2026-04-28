@@ -6,7 +6,7 @@ namespace RoomReservationSystem.Web.Repositories
     {
         Task<IEnumerable<Reservation>> GetAllAsync();
         Task<IEnumerable<Reservation>> GetByUserAsync(int userId);
-        Task<Reservation?> GetCurrentReservationAsync(int roomId);
+        Task<Reservation?> GetCurrentAsync(int roomId);
         Task<int> CreateAsync(Reservation reservation);
         Task UpdateAsync(Reservation reservation);
         Task DeleteAsync(int id);

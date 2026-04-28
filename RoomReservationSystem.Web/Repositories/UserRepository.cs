@@ -58,6 +58,17 @@ namespace RoomReservationSystem.Web.Repositories
                 """, new { Id = id });
         }
 
+        public async Task<User?> GetByUserNameAsync(string userName)
+        {
+            using var connection = new SqliteConnection(connectionString);
+
+            return await connection.QueryFirstOrDefaultAsync<User>("""
+                SELECT *
+                FROM User
+                WHERE UserName = @UserName;
+                """, new { UserName = userName });
+        }
+
         public async Task UpdateAsync(User user)
         {
             using var connection = new SqliteConnection(connectionString);

@@ -26,26 +26,11 @@ namespace RoomReservationSystem.Web.Repositories
         public async Task DeleteAsync(int id)
         {
             using var connection = new SqliteConnection(connectionString);
-            await connection.OpenAsync();
-            using var transaction = await connection.BeginTransactionAsync();
 
-            try
-            {
-                await connection.ExecuteAsync("""
-                    DELETE FROM RoomEquipment
-                    WHERE EquipmentId = @Id;
-                    """, new { Id = id }, transaction);
-                await connection.ExecuteAsync("""
+            await connection.ExecuteAsync("""
                     DELETE FROM Equipment
                     WHERE Id = @Id;
-                    """, new { Id = id }, transaction);
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
+                    """, new { Id = id });
         }
 
         public async Task<IEnumerable<Equipment>> GetAllAsync()
