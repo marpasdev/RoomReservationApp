@@ -44,6 +44,28 @@ namespace RoomReservationSystem.Web.Repositories
                 """);
         }
 
+        public async Task<Reservation?> GetByIdAsync(int id)
+        {
+            using var connection = new SqliteConnection(connectionString);
+
+            return await connection.QueryFirstOrDefault("""
+                SELECT *
+                FROM Reservation
+                WHERE Id = @Id
+                """, new { Id = id });
+        }
+
+        public async Task<IEnumerable<Reservation>> GetByRoomAndPeriodAsync(int roomId, DateTime from, DateTime to)
+        {
+            using var connection = new SqliteConnection(connectionString);
+
+            return await connection.QueryAsync<Reservation>("""
+                SELECT *
+                FROM Reservation
+                WHERE Start >= @From AND End <= @To AND RoomId = @RoomId AND Status = 0
+                """, new { RoomId = roomId, From = from, To = to });
+        }
+
         public async Task<IEnumerable<Reservation>> GetByUserAsync(int userId)
         {
             using var connection = new SqliteConnection(connectionString);
@@ -62,8 +84,23 @@ namespace RoomReservationSystem.Web.Repositories
             return await connection.QueryFirstOrDefaultAsync<Reservation>("""
                 SELECT *
                 FROM Reservation
-                WHERE RoomId = @RoomId and (Start <= @Now and End > @Now);
+                WHERE RoomId = @RoomId AND (Start <= @Now AND End > @Now);
                 """, new { RoomId = roomId, Now = DateTime.UtcNow });
+        }
+
+        public async Task<bool> HasCollisionAsync(int roomId, DateTime start, DateTime end, int? reservationId = null)
+        {
+            using var connection = new SqliteConnection(connectionString);
+
+            int count = await connection.ExecuteScalarAsync<int>("""
+                SELECT COUNT(*)
+                FROM Reservation
+                WHERE RoomId = @RoomId AND Start < @End AND End > @Start AND
+                (@ReservationId IS NULL OR @ReservationId != Id)
+                AND Status = 0
+                """, new { RoomId = roomId, Start = start, End = end, ReservationId = reservationId });
+
+            return count > 0;
         }
 
         public async Task UpdateAsync(Reservation reservation)

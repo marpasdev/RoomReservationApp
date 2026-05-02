@@ -1,6 +1,7 @@
 ﻿using RoomReservationSystem.Shared.Models;
 using Microsoft.Data.Sqlite;
 using Dapper;
+using RoomReservationSystem.Shared.DTOs.Equipment;
 
 namespace RoomReservationSystem.Web.Repositories
 {
@@ -13,7 +14,7 @@ namespace RoomReservationSystem.Web.Repositories
             this.connectionString = connectionString;
         }
 
-        public async Task CreateRoomEquipmentAsync(RoomEquipment roomEquipment)
+        public async Task CreateAsync(RoomEquipment roomEquipment)
         {
             using var connection = new SqliteConnection(connectionString);
 
@@ -23,7 +24,7 @@ namespace RoomReservationSystem.Web.Repositories
                 """, roomEquipment);
         }
 
-        public async Task DeleteRoomEquipmentAsync(int roomId, int equipmentId)
+        public async Task DeleteAsync(int roomId, int equipmentId)
         {
             using var connection = new SqliteConnection(connectionString);
 
@@ -33,18 +34,30 @@ namespace RoomReservationSystem.Web.Repositories
                 """, new { RoomId = roomId, EquipmentId = equipmentId });
         }
 
-        public async Task<IEnumerable<RoomEquipment>> GetByRoomAsync(int roomId)
+        public async Task DeleteByRoomAsync(int roomId)
         {
             using var connection = new SqliteConnection(connectionString);
 
-            return await connection.QueryAsync<RoomEquipment>("""
-                SELECT *
-                FROM RoomEquipment
+            await connection.ExecuteAsync("""
+                DELETE FROM RoomEquipment
                 WHERE RoomId = @RoomId;
                 """, new { RoomId = roomId });
         }
 
-        public async Task UpdateRoomEquipmentAsync(RoomEquipment roomEquipment)
+        public async Task<IEnumerable<EquipmentDto>> GetByRoomAsync(int roomId)
+        {
+            using var connection = new SqliteConnection(connectionString);
+
+            // TODO
+            return await connection.QueryAsync<EquipmentDto>("""
+                SELECT e.Id as Id, e.Name as Name, re.Quantity as Quantity
+                FROM RoomEquipment re
+                JOIN Equipment e ON e.Id = re.EquipmentId 
+                WHERE RoomId = @RoomId;
+                """, new { RoomId = roomId });
+        }
+
+        public async Task UpdateAsync(RoomEquipment roomEquipment)
         {
             using var connection = new SqliteConnection(connectionString);
 
