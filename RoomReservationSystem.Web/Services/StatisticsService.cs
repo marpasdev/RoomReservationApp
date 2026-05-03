@@ -15,19 +15,19 @@ namespace RoomReservationSystem.Web.Services
             this.roomRepository = roomRepository;
         }
 
-        public async Task<IEnumerable<RoomStatisticsDto>> GetAllStatisticsAsync(DateTime from, DateTime to)
+        public async Task<IEnumerable<RoomStatisticsDto>> GetAllAsync(DateTime from, DateTime to)
         {
             IEnumerable<Room> rooms = await roomRepository.GetAllAsync();
 
             IEnumerable<RoomStatisticsDto?> stats = await Task.WhenAll(rooms.Select(async r =>
             {
-                return await GetStatisticsAsync(from, to, r.Id);
+                return await GetAsync(from, to, r.Id);
             }));
 
             return stats!;
         }
 
-        public async Task<RoomStatisticsDto?> GetStatisticsAsync(DateTime from, DateTime to, int roomId)
+        public async Task<RoomStatisticsDto?> GetAsync(DateTime from, DateTime to, int roomId)
         {
             IEnumerable<Reservation> reservations = await 
                 reservationRepository.GetByRoomAndPeriodAsync(roomId, from, to);
