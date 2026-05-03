@@ -17,8 +17,8 @@ namespace RoomReservationSystem.Web.Repositories
         {
             using var connection = new SqliteConnection(connectionString);
             return await connection.ExecuteScalarAsync<int>("""
-                INSERT INTO User (Username, Email, PasswordHash, CreatedAt)
-                VALUES (@Username, @Email, @PasswordHash, @CreatedAt);
+                INSERT INTO User (UserName, Email, PasswordHash, CreatedAt)
+                VALUES (@UserName, @Email, @PasswordHash, @CreatedAt);
                 SELECT last_insert_rowid();
                 """, user);
         }
@@ -74,7 +74,7 @@ namespace RoomReservationSystem.Web.Repositories
             using var connection = new SqliteConnection(connectionString);
             await connection.ExecuteAsync("""
                 UPDATE User
-                SET Username = @Username,
+                SET UserName = @UserName,
                     Email = @Email,
                     PasswordHash = @PasswordHash
                 WHERE Id = @Id;

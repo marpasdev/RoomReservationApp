@@ -53,12 +53,20 @@ namespace RoomReservationSystem.Web
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
                     };
+                    options.Events = new JwtBearerEvents()
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies["jwt"];
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
             var app = builder.Build();
 
             using var connection = new SqliteConnection(connectionString);
-            var initScript = File.ReadAllText("../Database/init.sql");
+            var initScript = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "../Database/init.sql"));
             connection.Execute(initScript);
 
             // Configure the HTTP request pipeline.

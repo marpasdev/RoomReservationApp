@@ -17,4 +17,10 @@
     <ProjectReference Include="..\RoomReservationSystem.Shared\RoomReservationSystem.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Reservations\" />
+    <Folder Include="Views\Profile\" />
+    <Folder Include="Views\Rooms\" />
+  </ItemGroup>
+
 </Project>
