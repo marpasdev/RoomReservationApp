@@ -15,7 +15,8 @@ namespace RoomReservationSystem.Web.Controllers
         {
             List<ApiEndpointDto> endpoints = new List<ApiEndpointDto>();
             var assembly = Assembly.GetExecutingAssembly();
-            var controllers = assembly.GetTypes().Where(t => typeof(ControllerBase).IsAssignableFrom(t));
+            var controllers = assembly.GetTypes().Where(t => typeof(ControllerBase).IsAssignableFrom(t)
+            && (t.GetCustomAttribute<ApiControllerAttribute>() is not null) == true);
 
             foreach (var controller in controllers)
             {

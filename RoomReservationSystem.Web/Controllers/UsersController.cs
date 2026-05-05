@@ -18,7 +18,6 @@ namespace RoomReservationSystem.Web.Controllers
         }
 
 
-        //Task<IEnumerable<UserDto>> GetAllAsync();
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -26,7 +25,6 @@ namespace RoomReservationSystem.Web.Controllers
             return Ok(users);
         }
 
-        //Task<UserDto?> GetByIdAsync(int id);
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
@@ -35,7 +33,6 @@ namespace RoomReservationSystem.Web.Controllers
             return Ok(user);
         }
 
-        //Task UpdateAsync(UpdateUserRequest request);
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> UpdateAsync(int id, [FromBody] UpdateUserRequest request)
@@ -59,7 +56,6 @@ namespace RoomReservationSystem.Web.Controllers
             }
         }
 
-        //Task DeleteAsync(int id);
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteAsync(int id)
@@ -68,7 +64,6 @@ namespace RoomReservationSystem.Web.Controllers
             return Ok();
         }
 
-        //Task ChangePasswordAsync(UpdatePasswordRequest request, int userId);
         [HttpPut("changepassword")]
         [Authorize]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] UpdatePasswordRequest request)

@@ -1,0 +1,39 @@
+﻿@model RoomReservationSystem.Shared.DTOs.Reservations.CreateReservationRequest
+@{
+    ViewData["Title"] = "Create reservation";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <h2>Create reservation</h2>
+        <form asp-action="ChangePassword" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Start" class="form-label"></label>
+                <input asp-for="Start" class="form-control" />
+                <span asp-validation-for="Start" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="End" class="form-label"></label>
+                <input asp-for="End" class="form-control" />
+                <span asp-validation-for="End" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Purpose" class="form-label"></label>
+                <input asp-for="Purpose" class="form-control" />
+                <span asp-validation-for="Purpose" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PersonCount" class="form-label"></label>
+                <input asp-for="PersonCount" class="form-control" />
+                <span asp-validation-for="PersonCount" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Create reservation</button>
+        </form>
+    </div>
+</div>

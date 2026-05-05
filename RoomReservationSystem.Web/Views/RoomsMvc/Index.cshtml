@@ -1,0 +1,24 @@
+﻿@model IEnumerable<RoomReservationSystem.Shared.DTOs.Rooms.RoomDto>
+@using RoomReservationSystem.Shared.DTOs.Rooms
+
+@{
+    ViewData["Title"] = "Rooms";
+}
+
+<h2>Rooms</h2>
+
+<div class="row">
+        <h3>Name</h3>
+        <p>Capacity</p>
+        <p>Max reservation minutes</p>
+</div>
+@foreach (RoomDto room in Model)
+{
+    <div class="row">
+        <h3>@room.Name</h3>
+        <p>0/@room.Capacity</p>
+        <p>@room.MaxReservationMinutes</p>
+        <a href="/rooms/detail/@room.Id" class="btn btn-primary">Detail</a>
+    </div>
+}
+

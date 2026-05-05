@@ -18,9 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Reservations\" />
-    <Folder Include="Views\Profile\" />
-    <Folder Include="Views\Rooms\" />
+    <Folder Include="Views\ReservationsMvc\" />
   </ItemGroup>
 
 </Project>

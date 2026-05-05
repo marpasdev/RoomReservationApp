@@ -1,0 +1,47 @@
+﻿@using RoomReservationSystem.Shared.DTOs.Equipment
+@model RoomReservationSystem.Shared.DTOs.Rooms.RoomDto 
+
+@{
+    ViewData["Title"] = "RoomDetail";
+}
+
+<h2 class="j">@Model.Name</h2>
+
+    @if (Model.CurrentReservation is null)
+    {
+        <span>Capacity: 0/@Model.Capacity</span><br />
+    }
+    else
+    {
+        <span>Capacity: @Model.CurrentReservation.PersonCount / @Model.Capacity</span><br />
+    }
+    Maximum reservable minutes: @Model.MaxReservationMinutes
+
+    <h3>Equipment</h3>
+    @if (Model.Equipment is not null && Model.Equipment.Any())
+    {
+        <ul>
+        @foreach (EquipmentDto e in Model.Equipment)
+        {
+            <li>@e.Name - @e.Quantity</li>
+        }
+        </ul>
+    }
+    else
+    {
+        <p>None</p>
+    }
+
+    <h3>Current reservation</h3>
+    @if (Model.CurrentReservation is null)
+    {
+        <span>None</span>
+    } else
+    {
+        <span>Time: @Model.CurrentReservation.Start - @Model.CurrentReservation.End</span><br/>
+        <span>Purpose: @Model.CurrentReservation.Purpose</span>
+        <span>Occupancy: @Model.CurrentReservation.PersonCount / @Model.Capacity</span>
+    }
+
+    <a class="btn btn-primary"
+        href="/reservations/create?roomId=@Model.Id">Create reservation</a>

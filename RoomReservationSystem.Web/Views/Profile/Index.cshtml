@@ -1,0 +1,14 @@
+﻿@model RoomReservationSystem.Shared.DTOs.Users.UserDto
+@{
+    ViewData["Title"] = "Profile page";
+}
+
+<h2>@Model.UserName</h2>
+<div>
+    <span>Email: @Model.Email</span>
+    <span>User since: @Model.CreatedAt</span>
+</div>
+<div>
+    <a href="#" class="btn btn-primary">Edit profile</a>
+    <a href="#" class="btn btn-primary">Change password</a>
+</div>

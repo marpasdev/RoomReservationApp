@@ -1,0 +1,12 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace RoomReservationSystem.Web.Views.Rooms
+{
+    public class DetailModel : PageModel
+    {
+        public void OnGet()
+        {
+        }
+    }
+}

@@ -6,6 +6,7 @@
     <File Path=".gitignore" />
     <File Path="README.md" />
   </Folder>
+  <Project Path="RoomReservationSystem.Admin/RoomReservationSystem.Admin.csproj" Id="5828063d-d423-4b9c-b505-9af34d47e5e9" />
   <Project Path="RoomReservationSystem.Shared/RoomReservationSystem.Shared.csproj" />
   <Project Path="RoomReservationSystem.Web/RoomReservationSystem.Web.csproj" />
 </Solution>
