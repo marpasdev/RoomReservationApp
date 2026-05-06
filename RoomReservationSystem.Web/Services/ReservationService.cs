@@ -40,16 +40,24 @@ namespace RoomReservationSystem.Web.Services
             await reservationRepository.UpdateAsync(new Reservation()
             {
                 Id = id,
-                Status = ReservationStatus.Cancelled
+                Status = ReservationStatus.Cancelled,
+                RoomId = res.RoomId,
+                BookerId = res.BookerId,
+                CreatedAt = res.CreatedAt,
+                Start = res.Start,
+                End = res.End,
+                Purpose = res.Purpose,
+                PersonCount = res.PersonCount
             });
 
             await historyRepository.CreateAsync(new ReservationHistory()
             {
                 ChangedAt = DateTime.UtcNow,
-                ChangedByUserId = userId,
+                ChangedById = userId,
                 OldStatus = ReservationStatus.Active,
                 NewStatus = ReservationStatus.Cancelled,
                 ReservationId = id
+
             });
         }
 
@@ -221,7 +229,7 @@ namespace RoomReservationSystem.Web.Services
                 OldStatus = res.Status,
                 NewStatus = res.Status,
                 ReservationId = res.Id,
-                ChangedByUserId = userId
+                ChangedById = userId
             });
 
             await reservationRepository.UpdateAsync(new Reservation()
@@ -231,6 +239,9 @@ namespace RoomReservationSystem.Web.Services
                 End = request.End,
                 Purpose = request.Purpose,
                 PersonCount = request.PersonCount,
+                RoomId = res.RoomId,
+                BookerId = res.BookerId,
+                CreatedAt = res.CreatedAt,
                 Status = ReservationStatus.Active
             });
 

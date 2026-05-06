@@ -1,6 +1,6 @@
-﻿using RoomReservationSystem.Shared.Models;
+﻿using Dapper;
 using Microsoft.Data.Sqlite;
-using Dapper;
+using RoomReservationSystem.Shared.Models;
 
 namespace RoomReservationSystem.Web.Repositories
 {

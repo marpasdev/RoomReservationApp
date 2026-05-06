@@ -1,6 +1,5 @@
-﻿using RoomReservationSystem.Shared.DTOs.Rooms;
-using RoomReservationSystem.Shared.DTOs.Users;
-using RoomReservationSystem.Shared.Enums;
+﻿using RoomReservationSystem.Shared.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace RoomReservationSystem.Shared.DTOs.Reservations
 {
@@ -8,14 +7,14 @@ namespace RoomReservationSystem.Shared.DTOs.Reservations
     {
         public int Id { get; set; }
         public int RoomId { get; set; }
+        [Required]
         public DateTime Start { get; set; }
+        [Required]
         public DateTime End { get; set; }
         public string Purpose { get; set; } = string.Empty;
+        [Range(1, 100)]
         public int PersonCount { get; set; }
         public ReservationStatus Status { get; set; }
         public int BookerId { get; set; }
-        public string RoomName { get; set; } = string.Empty;
-        public bool CanBeEdited { get; set; }
-        public bool CanBeCancelled { get; set; }
     }
 }

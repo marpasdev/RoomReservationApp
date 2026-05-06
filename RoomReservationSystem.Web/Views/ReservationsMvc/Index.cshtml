@@ -36,20 +36,6 @@
                         <span class="badge bg-secondary">Cancelled</span>
                     }
                 </td>
-                <td>
-                    @if (reservation.CanBeEdited == true)
-                    {
-                        <a asp-controller="ReservationsMvc" asp-action="Edit"
-                           asp-route-id="@reservation.Id" class="btn btn-sm btn-warning">Edit</a>
-                    }
-                    @if (reservation.CanBeCancelled == true)
-                    {
-                        <form asp-controller="ReservationsMvc" asp-action="Cancel" method="post">
-                            <input type="hidden" name="id" value="@reservation.Id" />
-                            <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
-                        </form>
-                    }
-                </td>
             </tr>
         }
     </tbody>

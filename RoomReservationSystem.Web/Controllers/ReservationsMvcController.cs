@@ -60,8 +60,15 @@ namespace RoomReservationSystem.Web.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             ReservationDto? reservation = await reservationService.GetByIdAsync(id);
-            if (reservation is null) { return NotFound(); }
-            return View(reservation);
+            if (reservation is null) return NotFound();
+            return View(new UpdateReservationRequest()
+            {
+                Id = reservation.Id,
+                Start = reservation.Start,
+                End = reservation.End,
+                Purpose = reservation.Purpose,
+                PersonCount = reservation.PersonCount
+            });
         }
 
         [HttpPost("edit")]
@@ -81,7 +88,7 @@ namespace RoomReservationSystem.Web.Controllers
                 ModelState.AddModelError("", ex.Message);
                 return View(request);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Profile");
         }
 
         [HttpPost("cancel")]
@@ -89,7 +96,7 @@ namespace RoomReservationSystem.Web.Controllers
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             await reservationService.CancelAsync(id, userId);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Profile");
         }
     }
 }

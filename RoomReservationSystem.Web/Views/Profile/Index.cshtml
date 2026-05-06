@@ -34,9 +34,9 @@
             renderTable('current-reservations',
                 reservations.filter(r => new Date(r.start) <= now && new Date(r.end) >= now), false);
             renderTable('upcoming-reservations',
-                reservations.filter(r => new Date(r.start) > now), true);
+                reservations.filter(r => new Date(r.start) > now && r.status === 0), true);
             renderTable('past-reservations',
-                reservations.filter(r => new Date(r.end) < now), false);
+                reservations.filter(r => new Date(r.end) < now || r.status === 0), false);
         }
 
         function renderTable(containerId, reservations, showActions) {

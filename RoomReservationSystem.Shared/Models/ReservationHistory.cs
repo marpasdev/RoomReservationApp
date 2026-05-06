@@ -9,6 +9,6 @@ namespace RoomReservationSystem.Shared.Models
         public DateTime ChangedAt { get; set; }
         public ReservationStatus OldStatus { get; set; }
         public ReservationStatus NewStatus { get; set; }
-        public int ChangedByUserId { get; set; }
+        public int? ChangedById { get; set; }
     }
 }
