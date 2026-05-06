@@ -24,18 +24,22 @@ namespace RoomReservationSystem.Web.Controllers
             return View(reservations);
         }
 
-        [HttpGet]
-        public IActionResult Create()
+        [HttpGet("create/{roomId}")]
+        public IActionResult Create(int roomId)
         {
-            return View();
+            return View(new CreateReservationRequest()
+            {
+                RoomId = roomId
+            });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateReservationRequest request)
+        [HttpPost("create/{roomId}")]
+        public async Task<IActionResult> Create(int roomId, CreateReservationRequest request)
         {
 
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             request.BookerId = userId;
+            request.RoomId = roomId;
             if (!ModelState.IsValid)
             {
                 return View(request);
@@ -52,7 +56,7 @@ namespace RoomReservationSystem.Web.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("edit")]
         public async Task<IActionResult> Edit(int id)
         {
             ReservationDto? reservation = await reservationService.GetByIdAsync(id);
@@ -60,7 +64,7 @@ namespace RoomReservationSystem.Web.Controllers
             return View(reservation);
         }
 
-        [HttpPost]
+        [HttpPost("edit")]
         public async Task<IActionResult> Edit(UpdateReservationRequest request)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -80,7 +84,7 @@ namespace RoomReservationSystem.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        [HttpPost("cancel")]
         public async Task<IActionResult> Cancel(int id)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);

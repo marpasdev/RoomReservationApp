@@ -18,28 +18,28 @@ namespace RoomReservationSystem.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<ReservationDto>>> GetAllAsync()
         {
             var reservations = await reservationService.GetAllAsync();
             return Ok(reservations);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<ActionResult<ReservationDto?>> GetByIdAsync(int id)
         {
             var reservation = await reservationService.GetByIdAsync(id);
             return Ok(reservation);
         }
 
         [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetByUserAsync(int userId)
+        public async Task<ActionResult<IEnumerable<ReservationDto>>> GetByUserAsync(int userId)
         {
             var reservations = await reservationService.GetByUserAsync(userId);
             return Ok(reservations);
         }
 
         [HttpGet("room/{roomId}/current")]
-        public async Task<IActionResult> GetCurrentAsync(int roomId)
+        public async Task<ActionResult<ReservationDto?>> GetCurrentAsync(int roomId)
         {
             var reservation = await reservationService.GetCurrentAsync(roomId);
             return Ok(reservation);
@@ -67,7 +67,7 @@ namespace RoomReservationSystem.Web.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             await reservationService.DeleteAsync(id);

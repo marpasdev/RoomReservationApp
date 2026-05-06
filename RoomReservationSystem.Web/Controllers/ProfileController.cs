@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RoomReservationSystem.Shared.DTOs.Users;
 using RoomReservationSystem.Web.Services;
 using System.Security.Claims;
@@ -6,13 +7,16 @@ using System.Security.Claims;
 namespace RoomReservationSystem.Web.Controllers
 {
     [Route("profile")]
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly IUserService userService;
+        private readonly IReservationService reservationService;
 
-        public ProfileController(IUserService userService)
+        public ProfileController(IUserService userService, IReservationService reservationService)
         {
-            this.userService = userService; 
+            this.userService = userService;
+            this.reservationService = reservationService;
         }
 
         [HttpGet]
@@ -27,8 +31,16 @@ namespace RoomReservationSystem.Web.Controllers
             return View(user);
         }
 
-        [HttpGet("update")]
-        public async Task<IActionResult> UpdateProfile()
+        [HttpGet("reservations")]
+        public async Task<IActionResult> GetReservations()
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var reservations = await reservationService.GetByUserAsync(userId);
+            return Json(reservations);
+        }
+
+        [HttpGet("edit")]
+        public async Task<IActionResult> Edit()
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             UserDto? user = await userService.GetByIdAsync(userId);
@@ -44,9 +56,10 @@ namespace RoomReservationSystem.Web.Controllers
             });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateProfile(UpdateUserRequest request)
+        [HttpPost("edit")]
+        public async Task<IActionResult> Edit(UpdateUserRequest request)
         {
+            request.Id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             if (!ModelState.IsValid)
             {
                 return View(request);
@@ -63,7 +76,13 @@ namespace RoomReservationSystem.Web.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet("changepassword")]
+        public async Task<IActionResult> ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost("changepassword")]
         public async Task<IActionResult> ChangePassword(UpdatePasswordRequest request)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);

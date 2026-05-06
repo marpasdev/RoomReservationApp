@@ -43,5 +43,5 @@
         <span>Occupancy: @Model.CurrentReservation.PersonCount / @Model.Capacity</span>
     }
 
-    <a class="btn btn-primary"
-        href="/reservations/create?roomId=@Model.Id">Create reservation</a>
+    <a asp-controller="ReservationsMvc" asp-action="Create" 
+    asp-route-roomId="@Model.Id" class="btn btn-primary">Reserve</a>

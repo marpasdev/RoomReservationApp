@@ -14,5 +14,8 @@ namespace RoomReservationSystem.Shared.DTOs.Reservations
         public int PersonCount { get; set; }
         public ReservationStatus Status { get; set; }
         public int BookerId { get; set; }
+        public string RoomName { get; set; } = string.Empty;
+        public bool CanBeEdited { get; set; }
+        public bool CanBeCancelled { get; set; }
     }
 }

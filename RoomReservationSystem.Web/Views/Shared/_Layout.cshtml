@@ -18,9 +18,10 @@
             <div class="navbar-nav ms-auto">
                 @if (User.Identity!.IsAuthenticated)
                 {
-                    <a class="nav-link" asp-controller="Reservations" asp-action="Index">
+                    <a class="nav-link" asp-controller="RoomsMvc" asp-action="Index">Rooms</a>
+                    @* <a class="nav-link" asp-controller="Reservations" asp-action="Index">
                         My Reservations
-                    </a>
+                    </a> *@
                     <a class="nav-link" asp-controller="Profile" asp-action="Index">
                         @User.Identity.Name
                     </a>

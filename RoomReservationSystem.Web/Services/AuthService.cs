@@ -1,9 +1,8 @@
-﻿using BCrypt.Net;
+﻿using Microsoft.IdentityModel.Tokens;
 using RoomReservationSystem.Shared.DTOs.Auth;
 using RoomReservationSystem.Shared.DTOs.Users;
 using RoomReservationSystem.Shared.Models;
 using RoomReservationSystem.Web.Repositories;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -31,9 +30,17 @@ namespace RoomReservationSystem.Web.Services
                 return null;
             }
 
-            return new LoginResponse() { Token = GenerateToken(user), User = 
-                new UserDto() { UserName = user.UserName, Email = user.Email,
-                CreatedAt = user.CreatedAt, Id = user.Id }
+            return new LoginResponse()
+            {
+                Token = GenerateToken(user),
+                User =
+                new UserDto()
+                {
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    CreatedAt = user.CreatedAt,
+                    Id = user.Id
+                }
             };
         }
 
@@ -57,7 +64,7 @@ namespace RoomReservationSystem.Web.Services
                 UserName = request.UserName,
                 Email = request.Email,
                 CreatedAt = DateTime.UtcNow,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password)    
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password)
             });
         }
 
@@ -72,15 +79,20 @@ namespace RoomReservationSystem.Web.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, user.Id == 1 ? "Admin" : "User")
             };
+
+            DateTime expiry = (user.Id == 1) ?
+                DateTime.UtcNow.AddYears(1)
+                : DateTime.UtcNow.AddMinutes(
+                    int.Parse(configuration["Jwt:ExpiryMinutes"]!));
 
             var token = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
                 audience: configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(
-                    int.Parse(configuration["Jwt:ExpiryMinutes"]!)),
+                expires: expiry,
                 signingCredentials: credentials
                 );
 

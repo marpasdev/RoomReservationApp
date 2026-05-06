@@ -20,7 +20,8 @@ namespace RoomReservationSystem.Web.Controllers
 
             foreach (var controller in controllers)
             {
-                var controllerRoute = controller.GetCustomAttribute<RouteAttribute>()?.Template ?? string.Empty;
+                var controllerRoute = controller.GetCustomAttribute<RouteAttribute>()?.Template
+                    .Replace("[controller]", controller.Name.Replace("Controller", string.Empty)).ToLower() ?? string.Empty;
 
                 var methods = controller.GetMethods(BindingFlags.Public | BindingFlags.Instance |
                     BindingFlags.DeclaredOnly);
@@ -62,6 +63,8 @@ namespace RoomReservationSystem.Web.Controllers
                             "Query" : "Route"
                     }).ToList();
 
+                    string returns = GetReturnTypeName(method.ReturnType);
+
                     bool requiresAuth = method.GetCustomAttribute<AuthorizeAttribute>() is not null ||
                         controller.GetCustomAttribute<AuthorizeAttribute>() is not null;
 
@@ -72,13 +75,44 @@ namespace RoomReservationSystem.Web.Controllers
                         HttpMethod = httpMethod,
                         Route = fullRoute,
                         Parameters = parameters,
-                        Returns = method.ReturnType.Name,
+                        Returns = returns,
                         RequiresAuth = requiresAuth
                     });
                 }
             }
 
             return Ok(endpoints);
+        }
+
+        private string GetReturnTypeName(Type type)
+        {
+            if (!type.IsGenericType)
+            {
+                if (type.Name == "Task")
+                {
+                    return "void";
+                }
+                return type.Name;
+            }
+            else
+            {
+                Type innerType = type.GetGenericArguments()[0];
+
+                if (innerType.IsGenericType)
+                {
+                    Type innerInnerType = innerType.GetGenericArguments()[0];
+
+                    if (innerInnerType.IsGenericType)
+                    {
+                        Type innermostType = innerInnerType.GetGenericArguments()[0];
+                        return $"IEnumerable<{innermostType.Name}>";
+                    }
+
+                    return innerInnerType.Name;
+                }
+
+                return innerType.Name;
+            }
         }
     }
 }

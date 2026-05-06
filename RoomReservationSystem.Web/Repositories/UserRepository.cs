@@ -51,7 +51,7 @@ namespace RoomReservationSystem.Web.Repositories
         public async Task<User?> GetByIdAsync(int id)
         {
             using var connection = new SqliteConnection(connectionString);
-            return await connection.QueryFirstOrDefaultAsync("""
+            return await connection.QueryFirstOrDefaultAsync<User>("""
                 SELECT *
                 FROM User
                 WHERE Id = @Id

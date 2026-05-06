@@ -1,6 +1,6 @@
-﻿using RoomReservationSystem.Shared.Models;
+﻿using Dapper;
 using Microsoft.Data.Sqlite;
-using Dapper;
+using RoomReservationSystem.Shared.Models;
 
 namespace RoomReservationSystem.Web.Repositories
 {
@@ -40,7 +40,8 @@ namespace RoomReservationSystem.Web.Repositories
 
             return await connection.QueryAsync<Reservation>("""
                 SELECT *
-                FROM Reservation;
+                FROM Reservation
+                ORDER BY Start DESC
                 """);
         }
 
@@ -48,10 +49,11 @@ namespace RoomReservationSystem.Web.Repositories
         {
             using var connection = new SqliteConnection(connectionString);
 
-            return await connection.QueryFirstOrDefault("""
+            return await connection.QueryFirstOrDefaultAsync<Reservation>("""
                 SELECT *
                 FROM Reservation
                 WHERE Id = @Id
+                ORDER BY Start DESC
                 """, new { Id = id });
         }
 

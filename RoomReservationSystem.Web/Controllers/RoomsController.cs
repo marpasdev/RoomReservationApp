@@ -17,14 +17,14 @@ namespace RoomReservationSystem.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<RoomDto>>> GetAllAsync()
         {
             var rooms = await roomService.GetAllAsync();
             return Ok(rooms);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<ActionResult<RoomDto?>> GetByIdAsync(int id)
         {
             var room = await roomService.GetByIdAsync(id);
             if (room is null) { return NotFound(); }
@@ -32,8 +32,8 @@ namespace RoomReservationSystem.Web.Controllers
         }
 
         [HttpGet("available")]
-        public async Task<IActionResult> GetAvailableAsync(
-            [FromQuery] DateTime start, 
+        public async Task<ActionResult<IEnumerable<RoomDto>>> GetAvailableAsync(
+            [FromQuery] DateTime start,
             [FromQuery] DateTime end,
             [FromQuery] int minCapacity)
         {
@@ -42,7 +42,7 @@ namespace RoomReservationSystem.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAsync([FromBody] CreateRoomRequest request)
         {
             if (!ModelState.IsValid)
@@ -61,7 +61,7 @@ namespace RoomReservationSystem.Web.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAsync(int id, [FromBody] UpdateRoomRequest request)
         {
             if (id != request.Id)
@@ -84,7 +84,7 @@ namespace RoomReservationSystem.Web.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             try

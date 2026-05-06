@@ -19,14 +19,14 @@ namespace RoomReservationSystem.Web.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllAsync()
         {
             var users = await userService.GetAllAsync();
             return Ok(users);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<ActionResult<UserDto?>> GetByIdAsync(int id)
         {
             var user = await userService.GetByIdAsync(id);
             if (user is null) { return NotFound(); }
@@ -57,7 +57,7 @@ namespace RoomReservationSystem.Web.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             await userService.DeleteAsync(id);

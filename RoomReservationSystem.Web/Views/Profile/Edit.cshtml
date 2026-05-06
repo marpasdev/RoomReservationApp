@@ -1,12 +1,12 @@
 ﻿@model RoomReservationSystem.Shared.DTOs.Users.UpdateUserRequest
 @{
-    ViewBag["Title"] = "Editing profile";
+    ViewData["Title"] = "Editing profile";
 }
 
 <div class="row justify-content-center">
     <div class="col-md-4">
-        <h2>Change password</h2>
-        <form asp-action="ChangePassword" method="post">
+        <h2>Edit profile</h2>
+        <form asp-action="Edit" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             
             <div class="mb-3">
@@ -20,6 +20,8 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+
+            <input type="hidden" asp-for="Id" />
 
             <button type="submit" class="btn btn-primary w-100">Confirm changes</button>
         </form>

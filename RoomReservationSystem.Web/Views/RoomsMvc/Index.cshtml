@@ -7,18 +7,56 @@
 
 <h2>Rooms</h2>
 
-<div class="row">
-        <h3>Name</h3>
-        <p>Capacity</p>
-        <p>Max reservation minutes</p>
-</div>
-@foreach (RoomDto room in Model)
-{
-    <div class="row">
-        <h3>@room.Name</h3>
-        <p>0/@room.Capacity</p>
-        <p>@room.MaxReservationMinutes</p>
-        <a href="/rooms/detail/@room.Id" class="btn btn-primary">Detail</a>
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-3">
+        <label class="form-label">From</label>
+        <input type="datetime-local" name="from" class="form-control" value="@ViewBag.From" />
     </div>
-}
+    <div class="col-md-3">
+        <label class="form-label">To</label>
+        <input type="datetime-local" name="to" class="form-control" value="@ViewBag.To" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Min Capacity</label>
+        <input type="number" name="minCapacity" class="form-control" value="@ViewBag.MinCapacity" min="1" />
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+</form>
 
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Capacity</th>
+            <th>Max Duration (min)</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var room in Model)
+        {
+            <tr>
+                <td>@room.Name</td>
+                <td>@room.Capacity</td>
+                <td>@room.MaxReservationMinutes</td>
+                <td>
+                    @if (room.IsAvailable == true)
+                    {
+                        <span class="badge bg-success">Available</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Occupied</span>
+                    }
+                </td>
+                <td>
+                    <a asp-controller="RoomsMvc" asp-action="Detail" 
+                       asp-route-id="@room.Id" class="btn btn-sm btn-primary">Detail</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

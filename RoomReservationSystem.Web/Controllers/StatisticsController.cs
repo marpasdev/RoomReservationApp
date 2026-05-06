@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RoomReservationSystem.Shared.DTOs.Statistics;
 using RoomReservationSystem.Web.Services;
 
 namespace RoomReservationSystem.Web.Controllers
@@ -15,14 +16,14 @@ namespace RoomReservationSystem.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync([FromQuery] DateTime from, [FromQuery] DateTime to)
+        public async Task<ActionResult<IEnumerable<RoomStatisticsDto>>> GetAllAsync([FromQuery] DateTime from, [FromQuery] DateTime to)
         {
             var statistics = await statisticsService.GetAllAsync(from, to);
             return Ok(statistics);
         }
 
         [HttpGet("{roomId}")]
-        public async Task<IActionResult> GetAsync([FromQuery] DateTime from, [FromQuery] DateTime to, [FromRoute] int roomId)
+        public async Task<ActionResult<RoomStatisticsDto?>> GetAsync([FromQuery] DateTime from, [FromQuery] DateTime to, [FromRoute] int roomId)
         {
             var statistics = await statisticsService.GetAsync(from, to, roomId);
             return Ok(statistics);

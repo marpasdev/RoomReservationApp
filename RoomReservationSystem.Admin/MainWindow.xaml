@@ -5,13 +5,180 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RoomReservationSystem.Admin"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <TabItem Header="Users">
-            
-        </TabItem>
-        <TabItem Header="Rooms">
-            
-        </TabItem>
+        Title="MainWindow" Height="600" Width="1000">
+    
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
+        </Style>
+        <local:BoolToStatusConverter x:Key="BoolToStatusConverter"/>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <TabControl>
+            <TabItem Header="Rooms">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content="Add Room" Click="AddRoom_Click"/>
+            <Button Content="Edit Room" Click="EditRoom_Click"/>
+            <Button Content="Delete Room" Click="DeleteRoom_Click"/>
+            <Button Content="Statistics" Click="ShowStatistics_Click"/>
+            <Button Content="Refresh" Click="RefreshRooms_Click"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" 
+                  x:Name="RoomsGrid"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  CanUserSortColumns="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="40"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                <DataGridTextColumn Header="Capacity" Binding="{Binding Capacity}" Width="100"/>
+                <DataGridTextColumn Header="Max Duration (min)" Binding="{Binding MaxReservationMinutes}" Width="150"/>
+                <DataGridTemplateColumn Header="Status" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding IsAvailable, Converter={StaticResource BoolToStatusConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="2" x:Name="RoomsStatus" Margin="0,10,0,0" Foreground="Gray"/>
+    </Grid>
+</TabItem>
+            <TabItem Header="Users">
+                <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Margin="0,0,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                <Button Content="Delete User" Click="DeleteUser_Click"/>
+                <Button Content="Refresh" Click="RefreshUsers_Click"/>
+            </StackPanel>
+
+            <DataGrid Grid.Row="1"
+                      x:Name="UsersGrid"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      CanUserSortColumns="True"
+                      SelectionChanged="UsersGrid_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="50"/>
+                    <DataGridTextColumn Header="Username" Binding="{Binding UserName}" Width="*"/>
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                    <DataGridTextColumn Header="Created At" Binding="{Binding CreatedAt, StringFormat=dd.MM.yyyy}" Width="100"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <TextBlock Grid.Row="2" x:Name="UsersStatus" Margin="0,10,0,0" Foreground="Gray"/>
+        </Grid>
+
+        <Grid Grid.Column="1" Margin="5,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Content="User Reservations" FontWeight="Bold"/>
+
+            <DataGrid Grid.Row="1"
+                      x:Name="UserReservationsGrid"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      CanUserSortColumns="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Room Id" Binding="{Binding RoomId}" Width="*"/>
+                    <DataGridTextColumn Header="From" Binding="{Binding Start, StringFormat=dd.MM.yyyy HH:mm}" Width="130"/>
+                    <DataGridTextColumn Header="To" Binding="{Binding End, StringFormat=dd.MM.yyyy HH:mm}" Width="130"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="80"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+            </TabItem>
+            <TabItem Header="Reservations">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content="Delete Reservation" Click="DeleteReservation_Click"/>
+            <Button Content="Refresh" Click="RefreshReservations_Click"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1"
+                  x:Name="ReservationsGrid"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  CanUserSortColumns="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Room" Binding="{Binding RoomId}" Width="*"/>
+                <DataGridTextColumn Header="Booker" Binding="{Binding BookerId}" Width="*"/>
+                <DataGridTextColumn Header="From" Binding="{Binding Start, StringFormat=dd.MM.yyyy HH:mm}" Width="130"/>
+                <DataGridTextColumn Header="To" Binding="{Binding End, StringFormat=dd.MM.yyyy HH:mm}" Width="130"/>
+                <DataGridTextColumn Header="Purpose" Binding="{Binding Purpose}" Width="*"/>
+                <DataGridTextColumn Header="Person Count" Binding="{Binding PersonCount}" Width="100"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="80"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="2" x:Name="ReservationsStatus" Margin="0,10,0,0" Foreground="Gray"/>
+    </Grid>
+</TabItem>
+            <TabItem Header="Equipment">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content="Add Equipment" Click="AddEquipment_Click"/>
+            <Button Content="Delete Equipment" Click="DeleteEquipment_Click"/>
+            <Button Content="Refresh" Click="RefreshEquipment_Click"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1"
+                  x:Name="EquipmentGrid"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  CanUserSortColumns="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="50"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="2" x:Name="EquipmentStatus" Margin="0,10,0,0" Foreground="Gray"/>
+    </Grid>
+</TabItem>
+        </TabControl>
     </Grid>
 </Window>

@@ -1,7 +1,7 @@
 ﻿using RoomReservationSystem.Shared.DTOs.Reservations;
-using RoomReservationSystem.Web.Repositories;
-using RoomReservationSystem.Shared.Models;
 using RoomReservationSystem.Shared.Enums;
+using RoomReservationSystem.Shared.Models;
+using RoomReservationSystem.Web.Repositories;
 
 namespace RoomReservationSystem.Web.Services
 {
@@ -32,7 +32,7 @@ namespace RoomReservationSystem.Web.Services
                 throw new Exception("Reservation already cancelled");
             }
 
-            if (res.Start <=  DateTime.Now)
+            if (res.Start <= DateTime.Now)
             {
                 throw new Exception("A reservation that has already started cannot be cancelled");
             }
@@ -55,7 +55,7 @@ namespace RoomReservationSystem.Web.Services
 
         public async Task<int> CreateAsync(CreateReservationRequest request)
         {
-            if (request.Start <  DateTime.Now)
+            if (request.Start < DateTime.Now)
             {
                 throw new Exception("Cannot create a reservation starting in the past.");
             }
@@ -101,7 +101,9 @@ namespace RoomReservationSystem.Web.Services
         public async Task<IEnumerable<ReservationDto>> GetAllAsync()
         {
             IEnumerable<Reservation> reservations = await reservationRepository.GetAllAsync();
-            return reservations.Select(r => new ReservationDto() {
+            return reservations.Select(r => new ReservationDto()
+            {
+                Id = r.Id,
                 RoomId = r.RoomId,
                 Start = r.Start,
                 End = r.End,
@@ -139,6 +141,7 @@ namespace RoomReservationSystem.Web.Services
             IEnumerable<Reservation> reservations = await reservationRepository.GetByUserAsync(userId);
             return reservations.Select(r => new ReservationDto()
             {
+                Id = r.Id,
                 RoomId = r.RoomId,
                 Start = r.Start,
                 End = r.End,
@@ -170,7 +173,7 @@ namespace RoomReservationSystem.Web.Services
         {
             Reservation? res = await reservationRepository.GetByIdAsync(request.Id);
 
-            if (res is null) 
+            if (res is null)
             {
                 throw new Exception("Invalid reservation.");
             }

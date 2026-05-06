@@ -6,7 +6,6 @@ using RoomReservationSystem.Web.Repositories;
 using RoomReservationSystem.Web.Services;
 using System.Text;
 
-
 namespace RoomReservationSystem.Web
 {
     public class Program
@@ -17,7 +16,6 @@ namespace RoomReservationSystem.Web
 
             string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IUserRepository, UserRepository>(
@@ -38,6 +36,7 @@ namespace RoomReservationSystem.Web
             builder.Services.AddScoped<IReservationService, ReservationService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IStatisticsService, StatisticsService>();
+            builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
                 options =>

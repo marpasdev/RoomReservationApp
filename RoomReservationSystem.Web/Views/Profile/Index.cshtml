@@ -3,12 +3,104 @@
     ViewData["Title"] = "Profile page";
 }
 
-<h2>@Model.UserName</h2>
-<div>
-    <span>Email: @Model.Email</span>
-    <span>User since: @Model.CreatedAt</span>
+<div class="card mb-4">
+    <div class="card-body">
+        <h2>@Model.UserName</h2>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>User since:</strong> @Model.CreatedAt.ToString("dd.MM.yyyy")</p>
+        <a asp-controller="Profile" asp-action="Edit" class="btn btn-primary">Edit profile</a>
+        <a asp-controller="Profile" asp-action="ChangePassword" class="btn btn-secondary">Change password</a>
+    </div>
 </div>
-<div>
-    <a href="#" class="btn btn-primary">Edit profile</a>
-    <a href="#" class="btn btn-primary">Change password</a>
-</div>
+
+<h3>Current Reservations</h3>
+<div id="current-reservations"><p class="text-muted">Loading...</p></div>
+
+<h3>Upcoming Reservations</h3>
+<div id="upcoming-reservations"><p class="text-muted">Loading...</p></div>
+
+<h3>Past Reservations</h3>
+<div id="past-reservations"><p class="text-muted">Loading...</p></div>
+
+@section Scripts {
+    <script>
+        async function loadReservations() {
+            const response = await fetch('/profile/reservations', {
+                headers: { 'Authorization': 'Bearer ' + getCookie('jwt') }
+            });
+            const reservations = await response.json();
+            const now = new Date();
+
+            renderTable('current-reservations',
+                reservations.filter(r => new Date(r.start) <= now && new Date(r.end) >= now), false);
+            renderTable('upcoming-reservations',
+                reservations.filter(r => new Date(r.start) > now), true);
+            renderTable('past-reservations',
+                reservations.filter(r => new Date(r.end) < now), false);
+        }
+
+        function renderTable(containerId, reservations, showActions) {
+            const container = document.getElementById(containerId);
+            if (reservations.length === 0) {
+                container.innerHTML = '<p class="text-muted">No reservations.</p>';
+                return;
+            }
+            container.innerHTML = `
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Room</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Purpose</th>
+                            ${showActions ? '<th></th>' : ''}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${reservations.map(r => `
+                            <tr>
+                                <td>${r.roomId}</td>
+                                <td>${formatDate(r.start)}</td>
+                                <td>${formatDate(r.end)}</td>
+                                <td>${r.purpose}</td>
+                                ${showActions ? `
+                                    <td>
+                                        <a href="/reservations/edit?id=${r.id}"
+                                           class="btn btn-sm btn-warning">Edit</a>
+                                        <button onclick="cancelReservation(${r.id})"
+                                                class="btn btn-sm btn-danger">Cancel</button>
+                                    </td>` : ''}
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>`;
+        }
+
+        async function cancelReservation(id) {
+            if (!confirm('Cancel this reservation?')) return;
+            await fetch(`/api/reservations/${id}/cancel`, {
+                method: 'PUT',
+                headers: { 'Authorization': 'Bearer ' + getCookie('jwt') }
+            });
+            loadReservations();
+        }
+
+        function formatDate(dateStr) {
+            return new Date(dateStr).toLocaleString('en-GB', {
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadReservations();
+            setInterval(loadReservations, 60000);
+        });
+    </script>
+}

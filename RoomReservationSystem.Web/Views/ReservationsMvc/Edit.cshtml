@@ -6,7 +6,7 @@
 <div class="row justify-content-center">
     <div class="col-md-4">
         <h2>Edit reservation</h2>
-        <form asp-action="ChangePassword" method="post">
+        <form asp-action="Edit" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             
             <div class="mb-3">
@@ -32,6 +32,8 @@
                 <input asp-for="PersonCount" class="form-control" />
                 <span asp-validation-for="PersonCount" class="text-danger"></span>
             </div>
+
+            <input type="hidden" asp-for="Id" />
 
             <button type="submit" class="btn btn-primary w-100">Confirm changes</button>
         </form>

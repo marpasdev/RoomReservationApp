@@ -17,8 +17,4 @@
     <ProjectReference Include="..\RoomReservationSystem.Shared\RoomReservationSystem.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\ReservationsMvc\" />
-  </ItemGroup>
-
 </Project>
